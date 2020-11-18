@@ -1,0 +1,72 @@
+<html>
+
+<!-- CSS stylesheet -->
+<head>
+	<style>
+		body {font-family: "Arial", Helvetica, sans-serif;}
+		div.dbbox {margin-top: 70px; margin-bottom: 10px; font-weight: bold; text-align: center}
+		div.reqsize {font-size: 90%; margin-top: 50px; text-align: center}
+		div.warning {font-size: 100%; margin-top: 50px; text-align: center; font-weight: bold}
+		.redText {color: red}
+		.link_header {text-align: center; margin-top: 70px;  margin-bottom: 10px; font-weight: lighter}
+		.Table {display: table; width:90%; font-size:85%}
+		.TableRow {display: table-row;}
+		.TableCellLeft {display: table-cell; padding:3px 10px; width:150px; text-align: left}
+		.TableCellRight {display: table-cell; padding:3px 10px; text-align: left}
+		.EmptyTableCell {display: table-cell; height:20px; border-bottom: 1px solid #ddd}
+	</style>
+</head>
+
+<body>
+<!-- Form used for collecting user search -->
+<div class=dbbox><center><form action='.' method='POST'>{% csrf_token %} 
+    {{ form.as_p }} 
+    <input type='submit' value='Search' />
+</form></center></div>
+
+<!-- Display any error messages -->
+{% if none_found %}
+	<div class=warning>Not found in database: 
+		<span class="redText">{{ none_found }}</span></div>
+{% endif %}
+{% if some_not_found %}
+	<div class=warning>Not found in database: 
+	{% for word in some_not_found %}
+		<span class="redText">'{{ word }}'</span>	
+	{% endfor %}
+	</div>
+{% endif %}
+
+<!-- Display the results -->
+<center><div class="Table">
+	{% for row in results %}	
+		<div class="TableRow"><div class="EmptyTableCell"></div><div class="EmptyTableCell"></div></div>
+		{% for column, value in row.items %}
+			<div class="TableRow">
+				<div class="TableCellLeft"><strong>{{ column }}</strong></div>	
+				<div class="TableCellRight">
+					{% if column == "link" %}
+						<a href="http://127.0.0.1:8000/search2/{{ value }}"> {{ value }} </a>
+					{% else %}
+						{{ value }}
+					{% endif %}
+				</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	{% endfor %}
+</div>
+</center>
+
+
+</body>
+</html>
+
+
+
+<!-- <form action="{% url "search2" %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p><input type="submit" value="Send the form!"></p>
+</form> -->

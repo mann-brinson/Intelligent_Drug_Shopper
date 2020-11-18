@@ -21,6 +21,8 @@ from . import views
 app_name = 'shopper'
 urlpatterns = [
     path('', views.default, name='default'),
+    path('search/', views.search, name='search'),
+    path('search2/', views.search2, name='search2'),
 
     
     path('admin/', admin.site.urls),
