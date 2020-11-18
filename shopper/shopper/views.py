@@ -90,7 +90,7 @@ def search2(request):
 
             #Add each result to the context
             result_list = []
-            features = ['p_name', 'd_name', 'price']
+            features = ['Product', 'Active Ingredient', 'Average Price']
             for row in results:
                 ent = dict()
                 for idx, feat in enumerate(features):
@@ -106,5 +106,9 @@ def search2(request):
         context = {'form': form}
 
     return render(request, 'shopper/search2.html', context)
+
+def prod_page(request, prod_details):
+    return HttpResponse("Good job.")
+    # pass
 
 

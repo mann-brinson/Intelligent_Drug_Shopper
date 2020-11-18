@@ -46,7 +46,7 @@
 				<div class="TableCellLeft"><strong>{{ column }}</strong></div>	
 				<div class="TableCellRight">
 					{% if column == "link" %}
-						<a href="http://127.0.0.1:8000/search2/{{ value }}"> {{ value }} </a>
+						<a href="http://127.0.0.1:8000/search2/source_id=1&prod_name={{ value }}"> {{ value }} </a>
 					{% else %}
 						{{ value }}
 					{% endif %}
