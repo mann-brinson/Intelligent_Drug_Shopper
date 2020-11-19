@@ -53,7 +53,7 @@ def search(request):
 
             #Add each result to the context
             result_list = []
-            features = ['Product', 'Active Ingredient', 'Average Price']
+            features = ['Product', 'Active_Ingredient', 'Average_Price']
             for row in results:
                 ent = dict()
                 for idx, feat in enumerate(features):

@@ -18,7 +18,7 @@
 </head>
 
 <!-- Display the results -->
-<center><div class="Table">
+<!-- <center><div class="Table">
 	{% for row in results %}	
 		<div class="TableRow"><div class="EmptyTableCell"></div><div class="EmptyTableCell"></div></div>
 		{% for column, value in row.items %}
@@ -37,6 +37,23 @@
 		{% endfor %}
 	{% endfor %}
 </div>
-</center>
+</center> -->
+
+<table>
+    <tr>
+        <th>Store</th>
+        <th>Type</th>
+        <th>Price</th>
+        <th>GoodRx</th>
+    </tr>
+    {% for row in results %}
+    <tr> 
+        <td>{{ row.Store }}</td>
+        <td>{{ row.Type }}</td>
+        <td>{{ row.Price }}</td>
+        <td><a href="{{ row.Link }}">Purchase</a></td>
+    </tr>
+    {% endfor %}
+</table>
 
 </html>

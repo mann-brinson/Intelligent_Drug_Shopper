@@ -38,7 +38,7 @@
 {% endif %}
 
 <!-- Display the results -->
-<center><div class="Table">
+<!-- <div class="Table">
 	{% for row in results %}	
 		<div class="TableRow"><div class="EmptyTableCell"></div><div class="EmptyTableCell"></div></div>
 		{% for column, value in row.items %}
@@ -56,8 +56,24 @@
 		</div>
 		{% endfor %}
 	{% endfor %}
-</div>
-</center>
+</div> -->
+
+<table>
+    <tr>
+        <th>Product</th>
+        <th>Active Ingredient</th>
+        <th>Average Price</th>
+        <th>Product Page</th>
+    </tr>
+    {% for row in results %}
+    <tr> 
+        <td>{{ row.Product }}</td>
+        <td>{{ row.Active_Ingredient }}</td>
+        <td>{{ row.Average_Price }}</td>
+        <td><a href="http://127.0.0.1:8000/search/source_id:1&prod_name:{{ row.Product }}"> {{ row.Product }} </a></td>
+    </tr>
+    {% endfor %}
+</table>
 
 
 </body>
