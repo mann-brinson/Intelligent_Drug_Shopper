@@ -113,10 +113,16 @@ def drug_page(request, drug_details):
     conn = Connection() #Crecte db connection
     cmd1 = queries.search_drug_prods(source_id, drug_name)
     cmd2 = queries.search_drug_tmt(source_id, drug_name)
+    cmd3 = queries.search_drug_intrxs(drug_name)
+
     conn.cursor.execute(cmd1)
     products = conn.cursor.fetchall()
+
     conn.cursor.execute(cmd2)
     treatments = conn.cursor.fetchall()
+
+    conn.cursor.execute(cmd3)
+    interactions = conn.cursor.fetchall()
     # print('result: ', results)
 
     #Add each result to the context
@@ -138,6 +144,16 @@ def drug_page(request, drug_details):
             ent[feat] = row[idx]
         result_list2.append(ent)
     context['treatments'] = result_list2
+
+    #Quick and dirty
+    result_list3 = []
+    features = ['Drug']
+    for row in interactions:
+        ent = dict()
+        for idx, feat in enumerate(features):
+            ent[feat] = row[idx]
+        result_list3.append(ent)
+    context['interactions'] = result_list3
 
     # return HttpResponse("Good job.")
     return render(request, 'shopper/drug_page.html', context)

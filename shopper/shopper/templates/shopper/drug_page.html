@@ -18,7 +18,7 @@
 	</head>
 
 	<h1 style="background-color:#000099; color:white" >Intelligent Drug Shopper</h1>
-	<h2>{{drug_name}}</h2>
+	<h2>DRUG : {{drug_name}}</h2>
 
 	<h3>PRODUCTS</h3>
 	<table border="2" id="prod-table">
@@ -50,5 +50,15 @@
 	</table>
 
 	<h3>INTERACTS WITH</h3>
+	<table border="2" id="intrx-table">
+	    <tr>
+	        <th>Drug</th>
+	    </tr>
+	    {% for row in interactions %}
+	    <tr> 
+	        <td><a href="http://127.0.0.1:8000/search/drug_name:{{ row.Drug }}&source_id:1"> {{ row.Drug }} </a></td>
+	    </tr>
+	    {% endfor %}
+	</table>
 
 </html>

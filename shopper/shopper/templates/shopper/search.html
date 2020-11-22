@@ -15,38 +15,36 @@
 			.TableCellRight {display: table-cell; padding:3px 10px; text-align: left}
 			.EmptyTableCell {display: table-cell; height:20px; border-bottom: 1px solid #ddd}
 			.center {margin-left: auto; margin-right: auto}
+			h3 {text-align: center}
 		</style>
 	</head>
 
 	<h1 style="background-color:#000099; color:white" >Intelligent Drug Shopper</h1>
-
+	
 	<body>
-	<!-- Form used for collecting user search -->
-	<div class=dbbox><center><form action='.' method='POST'>{% csrf_token %} 
-	    {{ form.as_p }} 
-	    <input type='submit' value='Search' />
-	</form></center></div>
+		<h3>PRODUCT SEARCH</h3>
+		<!-- Form used for collecting user search -->
+		<div class=dbbox><center><form action='.' method='POST'>{% csrf_token %} 
+		    {{ form.as_p }} 
+		    <input type='submit' value='Search' />
+		</form></center></div>
 
-	<table border="2" id="prod-res-table" class="center">
-	    <tr>
-	        <th>Product</th>
-	        <th>Active Ingredient</th>
-	        <th>Average Price</th>
-	        <th>Product Page</th>
-	    </tr>
-	    {% for row in results %}
-	    <tr> 
-	        <td>{{ row.Product }}</td>
-	        <!-- <td>{{ row.Active_Ingredient }}</td> -->
-	        <td><a href="http://127.0.0.1:8000/search/drug_name:{{ row.Active_Ingredient }}&source_id:1"> {{ row.Active_Ingredient }} </a></td>
-
-	        <td>{{ row.Average_Price }}</td>
-
-	        <!-- <td><a href="http://127.0.0.1:8000/search/source_id:1&prod_name:{{ row.Product }}"> {{ row.Product }} </a></td> -->
-	        <td><a href="http://127.0.0.1:8000/search/prod_name:{{ row.Product }}&source_id:1"> {{ row.Product }} </a></td>
-	    </tr>
-	    {% endfor %}
-	</table>
+		<table border="2" id="prod-res-table" class="center">
+		    <tr>
+		        <th>Product</th>
+		        <th>Active Ingredient</th>
+		        <th>Average Price</th>
+		        <th>Product Page</th>
+		    </tr>
+		    {% for row in results %}
+		    <tr> 
+		        <td>{{ row.Product }}</td>
+		        <td><a href="http://127.0.0.1:8000/search/drug_name:{{ row.Active_Ingredient }}&source_id:1"> {{ row.Active_Ingredient }} </a></td>
+		        <td>{{ row.Average_Price }}</td>
+		        <td><a href="http://127.0.0.1:8000/search/prod_name:{{ row.Product }}&source_id:1"> {{ row.Product }} </a></td>
+		    </tr>
+		    {% endfor %}
+		</table>
 
 	</body>
 

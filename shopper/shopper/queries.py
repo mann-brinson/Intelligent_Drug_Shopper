@@ -120,3 +120,19 @@ def search_drug_tmt(source_id, drug_name): #called in views.drug_page
                 )
     '''
     return cmd
+
+def search_drug_intrxs(drug_name): #called in views.drug_page
+    cmd = f'''
+    SELECT (SELECT d.name
+            FROM drug.drug d
+            WHERE i.target_drug_id = d.id
+            ) Drug
+    FROM drug.interaction i 
+    WHERE EXISTS (SELECT 1
+                    FROM drug.drug d
+                    WHERE i.source_drug_id = d.id
+                    AND d.name = "{drug_name}"
+    )
+    ORDER BY Drug
+    '''
+    return cmd
