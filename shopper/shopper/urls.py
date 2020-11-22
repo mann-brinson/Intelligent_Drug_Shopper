@@ -22,9 +22,10 @@ app_name = 'shopper'
 urlpatterns = [
     path('', views.default, name='default'),
     path('search/', views.search, name='search'),
-    path('search/<str:prod_details>/', views.prod_page, name='prod_details'),
+    path('search/prod_name:<str:prod_details>/', views.prod_page, name='prod_details'),
+    # path('search/<str:prod_details>/', views.prod_page, name='prod_details'),
 
-    
+    path('search/drug_name:<str:drug_details>/', views.drug_page, name='drug_details'),
     # path('admin/', admin.site.urls),
     # path('polls/', include('polls.urls')),
 

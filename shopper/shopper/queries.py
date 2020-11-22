@@ -1,4 +1,4 @@
-def search_cond(condition, price_high): #called in views.search
+def search_cond(condition, price_low, price_high): #called in views.search
     cmd = f'''
     SELECT p.name prod_name, 
         (SELECT d.name
@@ -17,11 +17,12 @@ def search_cond(condition, price_high): #called in views.search
                         )
                     )
     AND p.avg_price < {price_high}
+    AND p.avg_price >= {price_low}
     ORDER BY p.avg_price
     '''
     return cmd
 
-def search_cond_currmed(condition, price_high, current_med):
+def search_cond_currmed(condition, price_low, price_high, current_med):
     cmd = f'''
     WITH curr_med_d AS (SELECT p.drug_id
                         FROM drug.product p
@@ -36,6 +37,7 @@ def search_cond_currmed(condition, price_high, current_med):
     FROM drug.product p 
     WHERE p.source_id = 1 #wiki
     AND p.avg_price < {price_high}
+    AND p.avg_price >= {price_low}
     AND EXISTS (SELECT 1
                 FROM drug.treatment t
                 WHERE t.source_id = 1 #wiki
@@ -66,8 +68,10 @@ def search_prod_prices(source_id, prod_name): #called in views.prod_page
         FROM drug.store s
         WHERE pr.store_id = s.id
         ) Store,
-        pr.type Type,
-        pr.price Price,
+        CASE WHEN pr.type != "COUPON" THEN "MEMBER"
+            ELSE pr.type
+            END Type,
+        ROUND(pr.price, 2) Price,
         pr.url Link
     FROM drug.price pr 
     WHERE pr.url != ''
@@ -78,5 +82,41 @@ def search_prod_prices(source_id, prod_name): #called in views.prod_page
                 AND p.name = "{prod_name}"
                 )
     ORDER by pr.price 
+    '''
+    return cmd
+
+
+#pr.type Type,
+
+def search_drug_prods(source_id, drug_name): #called in views.drug_page
+    cmd = f'''
+    SELECT p.name,
+        p.avg_price
+    FROM drug.product p
+    WHERE p.source_id = {source_id} #wiki
+    AND EXISTS (SELECT 1
+                FROM drug.drug d
+                WHERE d.id = p.drug_id
+                AND d.name = "{drug_name}")
+    ORDER by p.name 
+    '''
+    return cmd
+
+def search_drug_tmt(source_id, drug_name): #called in views.drug_page
+    cmd = f'''
+    SELECT c.name,
+        c.url
+    FROM drug.condition c
+    WHERE c.source_id = 2
+    AND EXISTS (SELECT 1
+                FROM drug.treatment t
+                WHERE t.source_id = 2
+                AND t.condition_id = c.id
+                AND EXISTS (SELECT 1
+                            FROM drug.drug d 
+                            WHERE t.drug_id = d.id 
+                            AND d.name = "{drug_name}"
+                    )
+                )
     '''
     return cmd

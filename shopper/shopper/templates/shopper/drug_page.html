@@ -14,40 +14,41 @@
 			.TableCellLeft {display: table-cell; padding:3px 10px; width:150px; text-align: left}
 			.TableCellRight {display: table-cell; padding:3px 10px; text-align: left}
 			.EmptyTableCell {display: table-cell; height:20px; border-bottom: 1px solid #ddd}
-			.center {margin-left: auto; margin-right: auto}
 		</style>
 	</head>
 
 	<h1 style="background-color:#000099; color:white" >Intelligent Drug Shopper</h1>
+	<h2>{{drug_name}}</h2>
 
-	<body>
-	<!-- Form used for collecting user search -->
-	<div class=dbbox><center><form action='.' method='POST'>{% csrf_token %} 
-	    {{ form.as_p }} 
-	    <input type='submit' value='Search' />
-	</form></center></div>
-
-	<table border="2" id="prod-res-table" class="center">
+	<h3>PRODUCTS</h3>
+	<table border="2" id="prod-table">
 	    <tr>
 	        <th>Product</th>
-	        <th>Active Ingredient</th>
 	        <th>Average Price</th>
-	        <th>Product Page</th>
 	    </tr>
-	    {% for row in results %}
+	    {% for row in products %}
 	    <tr> 
-	        <td>{{ row.Product }}</td>
-	        <!-- <td>{{ row.Active_Ingredient }}</td> -->
-	        <td><a href="http://127.0.0.1:8000/search/drug_name:{{ row.Active_Ingredient }}&source_id:1"> {{ row.Active_Ingredient }} </a></td>
-
-	        <td>{{ row.Average_Price }}</td>
-
-	        <!-- <td><a href="http://127.0.0.1:8000/search/source_id:1&prod_name:{{ row.Product }}"> {{ row.Product }} </a></td> -->
+	        <!-- <td>{{ row.Product }}</td> -->
 	        <td><a href="http://127.0.0.1:8000/search/prod_name:{{ row.Product }}&source_id:1"> {{ row.Product }} </a></td>
+	        <td>{{ row.Price }}</td>
 	    </tr>
 	    {% endfor %}
 	</table>
 
-	</body>
+	<h3>TREATMENTS FOR</h3>
+	<table border="2" id="tmt-table">
+	    <tr>
+	        <th>Condition</th>
+	        <th>WebMD</th>
+	    </tr>
+	    {% for row in treatments %}
+	    <tr> 
+	        <td>{{ row.Condition }}</td>
+	        <td><a href="{{ row.Link }}">Visit</a></td>
+	    </tr>
+	    {% endfor %}
+	</table>
+
+	<h3>INTERACTS WITH</h3>
 
 </html>

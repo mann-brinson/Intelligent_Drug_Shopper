@@ -32,6 +32,7 @@ def search(request):
             #Extract query strings from form
             form_data = request.POST.copy()
             condition = form_data['condition']
+            price_low = form_data['price_low']
             price_high = form_data['price_high']
             current_med = form_data['current_med']
 
@@ -43,9 +44,9 @@ def search(request):
             conn = Connection() #Crecte db connection
             #Construct query to get treatments
             if current_med == '': 
-                cmd = queries.search_cond(condition, price_high)
+                cmd = queries.search_cond(condition, price_low, price_high)
             else: 
-                cmd = queries.search_cond_currmed(condition, price_high, current_med)
+                cmd = queries.search_cond_currmed(condition, price_low, price_high, current_med)
 
             conn.cursor.execute(cmd)
             results = conn.cursor.fetchall()
@@ -71,11 +72,12 @@ def search(request):
     return render(request, 'shopper/search.html', context)
 
 def prod_page(request, prod_details):
+    # print('prod_details: ', prod_details)
     items = prod_details.split('&')
     print('items: ', items)
     # items = ['source_id:1', 'prod_name:Advil']
-    source_id = int(items[0].split(':')[1])
-    prod_name = items[1].split(':')[1]
+    source_id = int(items[1].split(':')[1])
+    prod_name = items[0]
 
     # context gets passed to the html template
     context = {'prod_name': prod_name}
@@ -99,4 +101,43 @@ def prod_page(request, prod_details):
     # return HttpResponse("Good job.")
     return render(request, 'shopper/prod_page.html', context)
 
+def drug_page(request, drug_details):
+    items = drug_details.split('&')
+    source_id = int(items[1].split(':')[1])
+    drug_name = items[0]
+    print('drug_name: ', drug_name)
 
+    # context gets passed to the html template
+    context = {'drug_name': drug_name}
+
+    conn = Connection() #Crecte db connection
+    cmd1 = queries.search_drug_prods(source_id, drug_name)
+    cmd2 = queries.search_drug_tmt(source_id, drug_name)
+    conn.cursor.execute(cmd1)
+    products = conn.cursor.fetchall()
+    conn.cursor.execute(cmd2)
+    treatments = conn.cursor.fetchall()
+    # print('result: ', results)
+
+    #Add each result to the context
+    result_list = []
+    features = ['Product', 'Price']
+    for row in products:
+        ent = dict()
+        for idx, feat in enumerate(features):
+            ent[feat] = row[idx]
+        result_list.append(ent)
+    context['products'] = result_list
+
+    #Quick and dirty
+    result_list2 = []
+    features = ['Condition', 'Link']
+    for row in treatments:
+        ent = dict()
+        for idx, feat in enumerate(features):
+            ent[feat] = row[idx]
+        result_list2.append(ent)
+    context['treatments'] = result_list2
+
+    # return HttpResponse("Good job.")
+    return render(request, 'shopper/drug_page.html', context)
